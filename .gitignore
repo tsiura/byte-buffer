@@ -1,0 +1,6 @@
+.idea
+.phpunit.cache
+vendor
+coverage
+logs
+examples
