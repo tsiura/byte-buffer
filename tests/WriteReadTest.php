@@ -19,7 +19,7 @@ class WriteReadTest extends TestCase
     /**
      * @dataProvider getBuffer
      */
-    public function testReadWrite($buf): void
+    public function testReadWrite(Buffer $buf): void
     {
         // FLOAT
         $buf->writeFloat(10.5);
@@ -177,5 +177,22 @@ class WriteReadTest extends TestCase
         $enc = 'abcde';
         $buf->writeUtf8String($enc);
         self::assertEquals(array_map('ord', str_split($enc)), $buf->readBytes());
+    }
+
+    /**
+     * @dataProvider getBuffer
+     */
+    public function testRemains(Buffer $buf): void
+    {
+        self::assertEquals(0, $buf->remains());
+
+        $buf->writeUInt16(1000);
+        self::assertEquals(2, $buf->remains());
+
+        $buf->writeUInt32(100000);
+        self::assertEquals(6, $buf->remains());
+
+        $buf->writeUInt64(10000000);
+        self::assertEquals(14, $buf->remains());
     }
 }

@@ -472,7 +472,7 @@ class Buffer implements Stringable
 
     public function remains(): int
     {
-        return $this->size() - $this->getPosition() - 1;
+        return $this->size() - $this->getPosition();
     }
 
     public function size(): int
@@ -488,6 +488,11 @@ class Buffer implements Stringable
     public function encode(): string
     {
         return implode('', array_map('chr', $this->buffer));
+    }
+
+    public function toBytesArray(): array
+    {
+        return $this->buffer;
     }
 
     public function __toString(): string
