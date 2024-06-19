@@ -110,6 +110,30 @@ class Buffer implements Stringable
         return $this;
     }
 
+    public function readDouble(): float
+    {
+        $this->checkOffset(8);
+
+        $slice = array_slice($this->buffer, $this->position, 8);
+        $result = unpack('e', pack('C8', ...$slice))[1];
+
+        $this->position += 8;
+
+        return $result;
+    }
+
+    public function readDoubleBE(): float
+    {
+        $this->checkOffset(8);
+
+        $slice = array_slice($this->buffer, $this->position, 8);
+        $result = unpack('E', pack('C8', ...$slice))[1];
+
+        $this->position += 8;
+
+        return $result;
+    }
+
     public function writeUtf8String(string $value): self
     {
         $this->buffer = array_merge($this->buffer, unpack('C*', pack('a*', $value)));

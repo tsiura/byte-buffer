@@ -21,73 +21,84 @@ class WriteReadTest extends TestCase
      */
     public function testReadWrite(Buffer $buf): void
     {
-        // FLOAT
-        $buf->writeFloat(10.5);
-        self::assertEquals('00 00 28 41', (string)$buf);
+        // Double
+        $buf->writeDouble(123.456);
+        self::assertEquals('77 BE 9F 1A 2F DD 5E 40', $buf->__toString());
+        self::assertEquals(123.456, $buf->readDouble());
         $buf->clear();
 
-        $buf->writeFloatBE(10.5);
-        self::assertEquals('41 28 00 00', (string)$buf);
-        $buf->clear();
-// INT
-        $buf->writeInt(200, 2);
-        self::assertEquals('C8 00', (string)$buf);
+        $buf->writeDoubleBE(123.456);
+        self::assertEquals('40 5E DD 2F 1A 9F BE 77', $buf->__toString());
+        self::assertEquals(123.456, $buf->readDoubleBE());
         $buf->clear();
 
-        $buf->writeInt(2000, 3);
-        self::assertEquals('D0 07 00', (string)$buf);
-        $buf->clear();
-
-        $buf->writeInt(-1000, 2);
-        self::assertEquals('18 FC', (string)$buf);
-        $buf->clear();
-
-        $buf->writeIntBE(-1000, 2);
-        self::assertEquals('FC 18', (string)$buf);
-        $buf->clear();
-
-        $buf->writeIntBE(200, 2);
-        self::assertEquals('00 C8', (string)$buf);
-        $buf->clear();
-
-        $buf->writeIntBE(2000, 3);
-        self::assertEquals('00 07 D0', (string)$buf);
-        $buf->clear();
-// STRING
-        $buf->writeUtf8String('abcde');
-        self::assertEquals('61 62 63 64 65', (string)$buf);
-        $buf->clear();
-// DOUBLE
         $buf->writeDouble(123456789.22);
-        self::assertEquals('AE 47 E1 54 34 6F 9D 41', (string)$buf);
+        self::assertEquals('AE 47 E1 54 34 6F 9D 41', $buf->__toString());
         $buf->clear();
 
         $buf->writeDoubleBE(123456789.22);
-        self::assertEquals('41 9D 6F 34 54 E1 47 AE', (string)$buf);
+        self::assertEquals('41 9D 6F 34 54 E1 47 AE', $buf->__toString());
         $buf->clear();
-// UINT
+
+        // FLOAT
+        $buf->writeFloat(10.5);
+        self::assertEquals('00 00 28 41', $buf->__toString());
+        $buf->clear();
+
+        $buf->writeFloatBE(10.5);
+        self::assertEquals('41 28 00 00', $buf->__toString());
+        $buf->clear();
+        // INT
+        $buf->writeInt(200, 2);
+        self::assertEquals('C8 00', $buf->__toString());
+        $buf->clear();
+
+        $buf->writeInt(2000, 3);
+        self::assertEquals('D0 07 00', $buf->__toString());
+        $buf->clear();
+
+        $buf->writeInt(-1000, 2);
+        self::assertEquals('18 FC', $buf->__toString());
+        $buf->clear();
+
+        $buf->writeIntBE(-1000, 2);
+        self::assertEquals('FC 18', $buf->__toString());
+        $buf->clear();
+
+        $buf->writeIntBE(200, 2);
+        self::assertEquals('00 C8', $buf->__toString());
+        $buf->clear();
+
+        $buf->writeIntBE(2000, 3);
+        self::assertEquals('00 07 D0', $buf->__toString());
+        $buf->clear();
+        // STRING
+        $buf->writeUtf8String('abcde');
+        self::assertEquals('61 62 63 64 65', $buf->__toString());
+        $buf->clear();
+        // UINT
         $buf->writeUInt(1000, 2);
-        self::assertEquals('E8 03', (string)$buf);
+        self::assertEquals('E8 03', $buf->__toString());
         $buf->clear();
 
         $buf->writeUIntBE(1000, 2);
-        self::assertEquals('03 E8', (string)$buf);
+        self::assertEquals('03 E8', $buf->__toString());
         $buf->clear();
 
         $buf->writeInt8(-50);
-        self::assertEquals('CE', (string)$buf);
+        self::assertEquals('CE', $buf->__toString());
         $buf->clear();
 
         $buf->writeUInt8(100);
-        self::assertEquals('64', (string)$buf);
+        self::assertEquals('64', $buf->__toString());
         $buf->clear();
 
         $buf->writeInt16(1000);
-        self::assertEquals('E8 03', (string)$buf);
+        self::assertEquals('E8 03', $buf->__toString());
         $buf->clear();
 
         $buf->writeInt16BE(1000);
-        self::assertEquals('03 E8', (string)$buf);
+        self::assertEquals('03 E8', $buf->__toString());
         $buf->clear();
 
         $buf->writeUtf8String('abcde');
