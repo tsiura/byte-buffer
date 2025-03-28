@@ -12,3 +12,6 @@ phpcbf:
 
 test:
 	php ./vendor/bin/phpunit --no-coverage ./tests/
+
+all:
+	make psalm && make phpstan && make test

@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tsiura\ByteBuffer;
+namespace Zeran\ByteBuffer;
 
-use Stringable;
-
-class Buffer implements Stringable
+/**
+ * @api
+ */
+class ArrayBuffer implements BufferInterface
 {
     private int $position = 0;
 
@@ -15,6 +16,7 @@ class Buffer implements Stringable
     ) {
     }
 
+    #[\Override]
     public static function fromArray(array $buffer): self
     {
         return new self($buffer);
@@ -28,6 +30,7 @@ class Buffer implements Stringable
         return $self;
     }
 
+    #[\Override]
     public function writeInt(int $value, int $size): self
     {
         $this->checkSigned($value, $size);
@@ -40,6 +43,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeIntBE(int $value, int $size): self
     {
         $this->checkSigned($value, $size);
@@ -55,6 +59,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeUInt(int $value, int $size): self
     {
         $this->checkUnsigned($value, $size);
@@ -67,6 +72,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeUIntBE(int $value, int $size): self
     {
         $this->checkUnsigned($value, $size);
@@ -82,6 +88,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeFloat(float $value): self
     {
         $this->buffer = array_merge($this->buffer, unpack('C*', pack('g', $value)));
@@ -89,6 +96,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeFloatBE(float $value): self
     {
         $this->buffer = array_merge($this->buffer, unpack('C*', pack('G', $value)));
@@ -96,6 +104,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeDouble(float $value): self
     {
         $this->buffer = array_merge($this->buffer, unpack('C*', pack('e', $value)));
@@ -103,6 +112,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeDoubleBE(float $value): self
     {
         $this->buffer = array_merge($this->buffer, unpack('C*', pack('E', $value)));
@@ -110,6 +120,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function readDouble(): float
     {
         $this->checkOffset(8);
@@ -122,6 +133,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function readDoubleBE(): float
     {
         $this->checkOffset(8);
@@ -134,6 +146,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function writeUtf8String(string $value): self
     {
         $this->buffer = array_merge($this->buffer, unpack('C*', pack('a*', $value)));
@@ -141,6 +154,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeInt8(int $value): self
     {
         $this->checkSigned($value, 1);
@@ -150,6 +164,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeUInt8(int $value): self
     {
         $this->checkUnsigned($value, 1);
@@ -159,86 +174,103 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeInt16(int $value): self
     {
         return $this->writeInt($value, 2);
     }
 
+    #[\Override]
     public function writeInt16BE(int $value): self
     {
         return $this->writeIntBE($value, 2);
     }
 
+    #[\Override]
     public function writeInt24(int $value): self
     {
         return $this->writeInt($value, 3);
     }
 
+    #[\Override]
     public function writeInt24BE(int $value): self
     {
         return $this->writeIntBE($value, 3);
     }
 
+    #[\Override]
     public function writeInt32(int $value): self
     {
         return $this->writeInt($value, 4);
     }
 
+    #[\Override]
     public function writeInt32BE(int $value): self
     {
         return $this->writeIntBE($value, 4);
     }
 
+    #[\Override]
     public function writeInt64(int $value): self
     {
         return $this->writeInt($value, 8);
     }
 
+    #[\Override]
     public function writeInt64BE(int $value): self
     {
         return $this->writeIntBE($value, 8);
     }
 
+    #[\Override]
     public function writeUInt16(int $value): self
     {
         return $this->writeUInt($value, 2);
     }
 
+    #[\Override]
     public function writeUInt16BE(int $value): self
     {
         return $this->writeUIntBE($value, 2);
     }
 
+    #[\Override]
     public function writeUInt24(int $value): self
     {
         return $this->writeUInt($value, 3);
     }
 
+    #[\Override]
     public function writeUInt24BE(int $value): self
     {
         return $this->writeUIntBE($value, 3);
     }
 
+    #[\Override]
     public function writeUInt32(int $value): self
     {
         return $this->writeUInt($value, 4);
     }
 
+    #[\Override]
     public function writeUInt32BE(int $value): self
     {
         return $this->writeUIntBE($value, 4);
     }
 
+    #[\Override]
     public function writeUInt64(int $value): self
     {
         return $this->writeUInt($value, 8);
     }
 
+    #[\Override]
     public function writeUInt64BE(int $value): self
     {
         return $this->writeUIntBE($value, 8);
     }
 
+    #[\Override]
     public function readUtf8String(?int $length = null): string
     {
         if ($length > 0) {
@@ -252,6 +284,7 @@ class Buffer implements Stringable
         return pack('C*', ...$slice);
     }
 
+    #[\Override]
     public function readInt(int $size): int
     {
         $this->checkOffset($size);
@@ -271,6 +304,7 @@ class Buffer implements Stringable
             : $val;
     }
 
+    #[\Override]
     public function readIntBE(int $size): int
     {
         $this->checkOffset($size);
@@ -290,6 +324,7 @@ class Buffer implements Stringable
             : $val;
     }
 
+    #[\Override]
     public function readUInt(int $size): int
     {
         $this->checkOffset($size);
@@ -306,6 +341,7 @@ class Buffer implements Stringable
         return $val;
     }
 
+    #[\Override]
     public function readUIntBE(int $size): int
     {
         $this->checkOffset($size);
@@ -321,96 +357,115 @@ class Buffer implements Stringable
         return $val;
     }
 
+    #[\Override]
     public function readInt8(): int
     {
         return $this->readInt(1);
     }
 
+    #[\Override]
     public function readInt16(): int
     {
         return $this->readInt(2);
     }
 
+    #[\Override]
     public function readInt24(): int
     {
         return $this->readInt(3);
     }
 
+    #[\Override]
     public function readInt32(): int
     {
         return $this->readInt(4);
     }
 
+    #[\Override]
     public function readInt64(): int
     {
         return $this->readInt(8);
     }
 
+    #[\Override]
     public function readInt16BE(): int
     {
         return $this->readIntBE(2);
     }
 
+    #[\Override]
     public function readInt24BE(): int
     {
         return $this->readIntBE(3);
     }
 
+    #[\Override]
     public function readInt32BE(): int
     {
         return $this->readIntBE(4);
     }
 
+    #[\Override]
     public function readInt64BE(): int
     {
         return $this->readIntBE(8);
     }
 
+    #[\Override]
     public function readUInt8(): int
     {
         return $this->readUInt(1);
     }
 
+    #[\Override]
     public function readUInt16(): int
     {
         return $this->readUInt(2);
     }
 
+    #[\Override]
     public function readUInt24(): int
     {
         return $this->readUInt(3);
     }
 
+    #[\Override]
     public function readUInt32(): int
     {
         return $this->readUInt(4);
     }
 
+    #[\Override]
     public function readUInt64(): int
     {
         return $this->readUInt(8);
     }
 
+    #[\Override]
     public function readUInt16BE(): int
     {
         return $this->readUIntBE(2);
     }
 
+    #[\Override]
     public function readUInt24BE(): int
     {
         return $this->readUIntBE(3);
     }
 
+    #[\Override]
     public function readUInt32BE(): int
     {
         return $this->readUIntBE(4);
     }
 
+    #[\Override]
     public function readUInt64BE(): int
     {
         return $this->readUIntBE(8);
     }
 
+    #[\Override]
     public function readFloat(): float
     {
         $this->checkOffset(4);
@@ -423,6 +478,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function readFloatBE(): float
     {
         $this->checkOffset(4);
@@ -435,6 +491,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function writeBytes(array $bytes): self
     {
         $this->buffer = array_merge($this->buffer, $bytes);
@@ -442,6 +499,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function readBytes(?int $size = null): array
     {
         if ($size > 0) {
@@ -455,21 +513,25 @@ class Buffer implements Stringable
         return $slice;
     }
 
+    #[\Override]
     public function getPosition(): int
     {
         return $this->position;
     }
 
+    #[\Override]
     public function setPosition(int $position): void
     {
         $this->position = $position;
     }
 
+    #[\Override]
     public function getBuffer(): string
     {
         return implode(array_map('chr', $this->buffer));
     }
 
+    #[\Override]
     public function ltrim(): self
     {
         $this->buffer = array_slice($this->buffer, $this->position);
@@ -478,6 +540,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function rtrim(): self
     {
         $this->buffer = array_slice($this->buffer, 0, $this->position + 1);
@@ -486,6 +549,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function clear(): self
     {
         $this->position = 0;
@@ -494,26 +558,31 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function remains(): int
     {
         return $this->size() - $this->getPosition();
     }
 
+    #[\Override]
     public function size(): int
     {
         return count($this->buffer);
     }
 
+    #[\Override]
     public function isMore(): bool
     {
         return $this->remains() > 0;
     }
 
+    #[\Override]
     public function encode(): string
     {
         return implode('', array_map('chr', $this->buffer));
     }
 
+    #[\Override]
     public function toBytesArray(): array
     {
         return $this->buffer;
@@ -524,6 +593,7 @@ class Buffer implements Stringable
         return implode(' ', array_map(fn ($v) => sprintf('%02X', $v), $this->buffer));
     }
 
+    #[\Override]
     public function writeListUInt8(array $data): self
     {
         foreach ($data as $val) {
@@ -533,6 +603,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeListUInt16(array $data): self
     {
         foreach ($data as $val) {
@@ -542,6 +613,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeListUInt24(array $data): self
     {
         foreach ($data as $val) {
@@ -551,6 +623,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function writeListUInt32(array $data): self
     {
         foreach ($data as $val) {
@@ -560,6 +633,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function readListUInt8(int $count): array
     {
         $result = [];
@@ -570,6 +644,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function readListUInt16(int $count): array
     {
         $result = [];
@@ -580,6 +655,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function readListUInt24(int $count): array
     {
         $result = [];
@@ -590,6 +666,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function readListUInt32(int $count): array
     {
         $result = [];
@@ -600,6 +677,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function readList8(int $size): array
     {
         $result = [];
@@ -610,6 +688,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function writeList8(array $list): self
     {
         foreach ($list as $item) {
@@ -619,6 +698,7 @@ class Buffer implements Stringable
         return $this;
     }
 
+    #[\Override]
     public function readList16(int $size): array
     {
         $result = [];
@@ -629,6 +709,7 @@ class Buffer implements Stringable
         return $result;
     }
 
+    #[\Override]
     public function writeList16(array $list): self
     {
         foreach ($list as $item) {

@@ -2,8 +2,10 @@
 
 namespace Tests;
 
-use Tsiura\ByteBuffer\Buffer;
+use Zeran\ByteBuffer\ArrayBuffer;
 use PHPUnit\Framework\TestCase;
+use Zeran\ByteBuffer\BufferInterface;
+use Zeran\ByteBuffer\StringBuffer;
 
 class WriteReadTest extends TestCase
 {
@@ -11,7 +13,10 @@ class WriteReadTest extends TestCase
     {
         return [
             [
-                new Buffer(),
+                new ArrayBuffer(),
+            ],
+            [
+                new StringBuffer(),
             ],
         ];
     }
@@ -19,7 +24,7 @@ class WriteReadTest extends TestCase
     /**
      * @dataProvider getBuffer
      */
-    public function testReadWrite(Buffer $buf): void
+    public function testReadWrite(BufferInterface $buf): void
     {
         // Double
         $buf->writeDouble(123.456);
@@ -193,7 +198,7 @@ class WriteReadTest extends TestCase
     /**
      * @dataProvider getBuffer
      */
-    public function testRemains(Buffer $buf): void
+    public function testRemains(BufferInterface $buf): void
     {
         self::assertEquals(0, $buf->remains());
 
